@@ -6,26 +6,30 @@ import java.sql.ResultSet
 data class Category(
     private val mId: Int,
     private val mName: String,
-    private val mCategoryCode: Int
+    private val mCategoryCode: Int,
+    private val mLanguageCode: String
 ) : Record() {
 
     constructor(item: ResultSet) : this(
         item.getInt("id"),
         item.getString("name"),
-        item.getInt("category_code")
+        item.getInt("category_code"),
+        item.getString("language_code")
     )
 
     fun <T> map(mapper: Mapper<T>) = mapper.map(
         mId,
         mName,
-        mCategoryCode
+        mCategoryCode,
+        mLanguageCode
     )
 
     interface Mapper<T> {
         fun map(
             id: Int,
             name: String,
-            categoryCode: Int
+            categoryCode: Int,
+            languageCode: String
         ) : T
     }
 

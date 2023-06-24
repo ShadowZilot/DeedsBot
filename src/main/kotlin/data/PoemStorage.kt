@@ -9,7 +9,7 @@ interface PoemStorage : StorageShell {
 
     fun randomPoem(languageCode: String, categoryCode: Int) : Poem
 
-    class Base(
+    class Base private constructor(
         private val mTableName: String,
         private val mDatabase: DatabaseHelper
     ) : PoemStorage {
