@@ -1,0 +1,6 @@
+const val sStartLabel = "start_label"
+const val sRandomPoemLabel = "random_poem_label"
+const val sPoemCategoryLabel = "poem_category"
+const val sSeeProofLabel = "proof_label"
+const val sSeeInSource = "see_poem_source"
+const val sAnotherPoemLabel = "another_poem_label"
