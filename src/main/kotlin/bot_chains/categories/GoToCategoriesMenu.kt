@@ -7,14 +7,18 @@ import data.CategoryToButton
 import executables.AnswerToCallback
 import executables.EditTextMessage
 import executables.Executable
+import executables.SendMessage
 import handlers.OnCallbackGotten
+import handlers.OnTextGotten
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
 import sBackLabel
+import sPoemCategoryLabel
 import sSelectCategoryLabel
 import translations.domain.ContextString.Base.Strings
 import updating.UpdatingLanguageCode
+import updating.UpdatingMessage
 
 class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
 
@@ -48,12 +52,15 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
         )
         return listOf(
             AnswerToCallback(mKey),
-            EditTextMessage(
+            SendMessage(
                 mKey,
                 Strings().string(sSelectCategoryLabel, updating),
-                -1,
                 keyboard
-            )
+            ) {
+                mStates.state(updating).editor(mStates).apply {
+                    putInt("mainMessageId", it)
+                }
+            }
         )
     }
 }

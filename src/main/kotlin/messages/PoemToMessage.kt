@@ -3,9 +3,9 @@ package messages
 import core.Updating
 import data.CategoryStorage
 import data.Poem
-import executables.EditTextMessage
 import executables.Executable
 import executables.SendMessage
+import executables.SendPhoto
 import helpers.ToMarkdownSupported
 import helpers.convertToVertical
 import keyboard_markup.InlineButton
@@ -20,7 +20,6 @@ import updating.UpdatingLanguageCode
 class PoemToMessage(
     private val mKey: String,
     private val mUserLanguageCode: Updating,
-    private val mIsEdit: Boolean,
     private val mSelectedCategory: Int = -1,
     private val mOnId: (id: Int) -> Unit = {},
 ) : Poem.Mapper<Executable> {
@@ -33,7 +32,8 @@ class PoemToMessage(
         bibleLang: String,
         bibleLangCode: Int,
         text: String,
-        linkToProof: String
+        linkToProof: String,
+        imageSource: String
     ): Executable {
         val textMessage = buildString {
             if (mSelectedCategory != -1) {
@@ -66,18 +66,22 @@ class PoemToMessage(
                 )
             ).convertToVertical()
         )
-        return if (mIsEdit) {
-            EditTextMessage(
-                mKey,
-                textMessage,
-                -1,
-                keyboard
-            )
-        } else {
+        return if (imageSource.isEmpty()) {
             SendMessage(
                 mKey,
                 textMessage,
-                keyboard
+                keyboard,
+                mOnMessageIdGotten = mOnId
+            )
+        } else {
+            SendPhoto(
+                mKey,
+                textMessage,
+                mImageId = imageSource,
+                mReplyMarkup = keyboard,
+                mListener = { messageId, _ ->
+                    mOnId.invoke(messageId)
+                }
             )
         }
     }

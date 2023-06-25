@@ -23,9 +23,12 @@ class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
                 PoemToMessage(
                     mKey,
                     updating,
-                    true,
                     categoryCode
-                )
+                ) {
+                    mStates.state(updating).editor(mStates).apply {
+                        putInt("mainMessageId", it)
+                    }
+                }
             )
         )
     }

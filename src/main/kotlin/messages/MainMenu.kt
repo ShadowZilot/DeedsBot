@@ -8,6 +8,8 @@ import helpers.ToMarkdownSupported
 import helpers.convertToVertical
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
+import keyboard_markup.ReplyButton
+import keyboard_markup.ReplyKeyboardMarkup
 import sPoemCategoryLabel
 import sRandomPoemLabel
 import sStartLabel
@@ -32,12 +34,12 @@ interface MainMenu {
             val keyboard = InlineKeyboardMarkup(
                 listOf(
                     InlineButton(
-                        Strings().string(sRandomPoemLabel, updating),
-                        mCallbackData = "randomPoem"
-                    ),
-                    InlineButton(
                         Strings().string(sPoemCategoryLabel, updating),
                         mCallbackData = "poemCategories"
+                    ),
+                    InlineButton(
+                        Strings().string(sRandomPoemLabel, updating),
+                        mCallbackData = "randomPoem"
                     )
                 ).convertToVertical()
             )

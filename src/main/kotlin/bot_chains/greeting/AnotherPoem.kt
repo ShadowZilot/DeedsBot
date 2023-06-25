@@ -12,7 +12,11 @@ class AnotherPoem : Chain(OnCallbackGotten("anotherPoem")) {
     override suspend fun executableChain(updating: Updating): List<Executable> {
         return listOf(
             AnswerToCallback(mKey),
-            MainMenu.Base(mKey, true).message(updating)
+            MainMenu.Base(mKey, false) {
+                mStates.state(updating).editor(mStates).apply {
+                    putInt("mainMessageId", it)
+                }
+            }.message(updating)
         )
     }
 }
