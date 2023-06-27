@@ -1,24 +1,20 @@
 package bot_chains.categories
 
 import chain.Chain
+import commons.BackButton
 import core.Updating
 import data.CategoryStorage
 import data.CategoryToButton
 import executables.AnswerToCallback
-import executables.EditTextMessage
 import executables.Executable
 import executables.SendMessage
 import handlers.OnCallbackGotten
-import handlers.OnTextGotten
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
-import sBackLabel
-import sPoemCategoryLabel
 import sSelectCategoryLabel
 import translations.domain.ContextString.Base.Strings
 import updating.UpdatingLanguageCode
-import updating.UpdatingMessage
 
 class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
 
@@ -42,10 +38,10 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
                 }
                 add(
                     listOf(
-                        InlineButton(
-                            Strings().string(sBackLabel, updating),
-                            mCallbackData = "anotherPoem"
-                        )
+                        BackButton.Base(
+                            "anotherPoem",
+                            updating
+                        ).button()
                     )
                 )
             }
