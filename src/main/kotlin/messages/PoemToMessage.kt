@@ -58,7 +58,7 @@ class PoemToMessage(
                 ),
                 InlineButton(
                     Strings().string(sSeeInSource, mUserLanguageCode),
-                    mUrl = "https://www.bible.com/bible/$bibleLangCode/$tag.$bibleLang"
+                    mWebAppUrl = "https://www.bible.com/bible/$bibleLangCode/$tag.$bibleLang"
                 ),
                 InlineButton(
                     Strings().string(sAnotherPoemLabel, mUserLanguageCode),

@@ -5,6 +5,9 @@ import data.PoemStorage
 import functions.GreetingFeature
 import functions.PoemsProviding
 import helpers.storage.jdbc_wrapping.DatabaseHelper
+import okhttp3.OkHttpClient
+
+val sClient = OkHttpClient()
 
 fun main(args: Array<String>) {
     val provider = BotProvider.Base(args)
