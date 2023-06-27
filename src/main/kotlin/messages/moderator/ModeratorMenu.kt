@@ -6,8 +6,12 @@ import executables.EditTextMessage
 import executables.Executable
 import executables.SendMessage
 import helpers.convertToVertical
+import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
+import keyboard_markup.InlineModeQuery
+import sAddVerseLabel
 import sModeratorText
+import sSearchVersesLabel
 import translations.domain.ContextString.Base.Strings
 
 interface ModeratorMenu {
@@ -25,6 +29,14 @@ interface ModeratorMenu {
             val text = Strings().string(sModeratorText, mLanguage)
             val keyboard = InlineKeyboardMarkup(
                 listOf(
+                    InlineButton(
+                        Strings().string(sSearchVersesLabel, mLanguage),
+                        mInlineMode = InlineModeQuery.CurrentChat("")
+                    ),
+                    InlineButton(
+                        Strings().string(sAddVerseLabel, mLanguage),
+                        mCallbackData = "addVerse"
+                    ),
                     BackButton.Base(
                         "backToMainMenu",
                         mLanguage

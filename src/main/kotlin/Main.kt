@@ -3,6 +3,7 @@ import core.storage.Storages
 import data.CategoryStorage
 import data.PoemStorage
 import functions.GreetingFeature
+import functions.ModeratorFunctions
 import functions.PoemsProviding
 import helpers.storage.jdbc_wrapping.DatabaseHelper
 import okhttp3.OkHttpClient
@@ -18,6 +19,7 @@ fun main(args: Array<String>) {
     db.createTable(CategoryStorage.Base.Instance().tableSchema())
     provider.createdBot(
         GreetingFeature(),
-        PoemsProviding()
+        PoemsProviding(),
+        ModeratorFunctions()
     )
 }
