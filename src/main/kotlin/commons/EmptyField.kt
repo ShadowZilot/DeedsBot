@@ -13,7 +13,7 @@ interface EmptyField {
     ) : EmptyField {
         override fun fieldLabel(): String {
             return "$mLabel: *${
-                if (mValue == mDefaultValue) {
+                if (mValue != mDefaultValue) {
                     ToMarkdownSupported.Base(
                         mValue.toString()
                     ).convertedString()
