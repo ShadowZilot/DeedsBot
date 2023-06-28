@@ -5,6 +5,7 @@ import core.Updating
 import executables.DeleteMessage
 import executables.Executable
 import handlers.CommandEvent
+import messages.moderator.ModeratorMenu
 import updating.UserIdUpdating
 
 class GoToModeratorMenu : Chain(CommandEvent("/moderator")) {
@@ -15,8 +16,17 @@ class GoToModeratorMenu : Chain(CommandEvent("/moderator")) {
             DeleteMessage(
                 mKey,
                 updating.map(UserIdUpdating()).toString(),
-                mStates.state(updating).long("mainMessageId")
-            )
+                mStates.state(updating).int("mainMessageId").toLong()
+            ),
+            ModeratorMenu.Base(
+                mKey,
+                updating,
+                false
+            ) {
+                mStates.state(updating).editor(mStates).apply {
+                    putInt("mainMessageId", it)
+                }.commit()
+            }.message()
         )
     }
 }

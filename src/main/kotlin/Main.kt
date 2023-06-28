@@ -18,8 +18,8 @@ fun main(args: Array<String>) {
     CategoryStorage.Base.Instance.create("poem_categories", db)
     db.createTable(CategoryStorage.Base.Instance().tableSchema())
     provider.createdBot(
+        ModeratorFunctions(),
         GreetingFeature(),
         PoemsProviding(),
-        ModeratorFunctions()
     )
 }

@@ -2,6 +2,7 @@ package data
 
 import helpers.storage.StorageShell
 import helpers.storage.jdbc_wrapping.DatabaseHelper
+import java.sql.SQLException
 
 interface CategoryStorage : StorageShell {
 
@@ -36,7 +37,11 @@ interface CategoryStorage : StorageShell {
                 "SELECT name FROM $mTableName WHERE `language_code` = '$langCode'" +
                         " AND `category_code` = $categoryCode;"
             ) { item, _ ->
-                name = item.getString("name")
+                name = try {
+                    item.getString("name")
+                } catch (e: SQLException) {
+                    ""
+                }
             }
             return name
         }
