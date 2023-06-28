@@ -16,6 +16,8 @@ class ModeratorFunctions : BotChains {
         EndEnterStringField(),
         ModeratorBackToVerse(),
         StartEnterIntField(),
-        EndEnterIntField()
+        EndEnterIntField(),
+        StartInputCategory(),
+        EndInputCategory()
     )
 }

@@ -6,26 +6,23 @@ import data.Poem
 import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
-import handlers.OnCallbackGotten
+import handlers.OnCallbackDataGotten
 import messages.moderator.PoemContentManageMessage
-import updating.UserIdUpdating
+import updating.UpdatingCallbackInt
 
-class ModeratorBackToVerse : Chain(OnCallbackGotten("moderatorBackToVerse")) {
+class EndInputCategory : Chain(OnCallbackDataGotten("addCategory")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
+        val categoryCode = updating.map(UpdatingCallbackInt("addCategory"))
         mStates.state(updating).editor(mStates).apply {
-            deleteValue("waitForString")
-            deleteValue("waitForInt")
-            deleteValue("waitForImage")
+            putInt("category_code", categoryCode)
         }.commit()
         return listOf(
             AnswerToCallback(mKey),
-            DeleteMessage(
-                mKey,
-                updating.map(UserIdUpdating()).toString(),
-                mStates.state(updating).int("mainMessageId").toLong()
-            ),
-            Poem(mStates.state(updating)).map(
+            DeleteMessage(mKey, updating),
+            Poem(
+                mStates.state(updating)
+            ).map(
                 PoemContentManageMessage(
                     mKey,
                     updating,
