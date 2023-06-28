@@ -9,6 +9,8 @@ interface PoemStorage : StorageShell {
 
     fun randomPoem(languageCode: String, categoryCode: Int) : Poem
 
+    fun insertPoem(poem: Poem)
+
     class Base private constructor(
         private val mTableName: String,
         private val mDatabase: DatabaseHelper
@@ -33,6 +35,10 @@ interface PoemStorage : StorageShell {
                 poem = Poem(item)
             }
             return poem ?: throw Exception()
+        }
+
+        override fun insertPoem(poem: Poem) {
+            mDatabase.executeQueryWithoutResult(poem.insertSQLQuery(mTableName))
         }
 
         override fun tableName() = mTableName

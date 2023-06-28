@@ -18,6 +18,10 @@ class ModeratorFunctions : BotChains {
         StartEnterIntField(),
         EndEnterIntField(),
         StartInputCategory(),
-        EndInputCategory()
+        EndInputCategory(),
+        StartInputImage(),
+        EndInputCategory(),
+        SubmitAddVerse(),
+        EndInputImage()
     )
 }
