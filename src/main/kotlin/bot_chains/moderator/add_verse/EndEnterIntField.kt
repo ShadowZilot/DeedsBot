@@ -11,15 +11,15 @@ import staging.safetyString
 import updating.UpdatingMessage
 import updating.UserIdUpdating
 
-class EndEnterStringField : Chain(OnTextGotten()) {
+class EndEnterIntField : Chain(OnTextGotten()) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
-        return if (mStates.state(updating).safetyString("waitForString") != "") {
+        return if (mStates.state(updating).safetyString("waitForInt") != "") {
             val input = updating.map(UpdatingMessage())
-            val key = mStates.state(updating).string("waitForString")
+            val key = mStates.state(updating).string("waitForInt")
             mStates.state(updating).editor(mStates).apply {
-                putString(key, input)
-                deleteValue("waitForString")
+                putInt(key, input.toInt())
+                deleteValue("waitForInt")
             }.commit()
             listOf(
                 DeleteMessage(mKey, updating),
