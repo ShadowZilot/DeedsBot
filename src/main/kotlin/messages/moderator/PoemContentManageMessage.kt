@@ -18,6 +18,7 @@ import sCategoryLabelField
 import sImageSourceLabelField
 import sLinkToProofLabelField
 import sPoemTextLabelField
+import sSubmitLabel
 import sVerseTagLabelField
 import translations.domain.ContextString.Base.Strings
 import updating.UpdatingLanguageCode
@@ -43,34 +44,34 @@ class PoemContentManageMessage(
             appendLine(Strings().string(sAddVerseHelperLabel, mLanguage))
             appendLine()
             appendLine(EmptyField.Base(
-                Strings().string(sCategoryLabelField, mLanguage),
+                "\\*${Strings().string(sCategoryLabelField, mLanguage)}",
                 CategoryStorage.Base.Instance().categoryName(mLanguage.map(UpdatingLanguageCode()), categoryCode),
                 ""
             ).fieldLabel())
             appendLine(
                 EmptyField.Base(
-                    Strings().string(sVerseTagLabelField, mLanguage),
+                    "\\*${Strings().string(sVerseTagLabelField, mLanguage)}",
                     tag,
                     ""
                 ).fieldLabel()
             )
             appendLine(
                 EmptyField.Base(
-                    Strings().string(sBibleLangLabelField, mLanguage),
+                    "\\*${Strings().string(sBibleLangLabelField, mLanguage)}",
                     bibleLang,
                     ""
                 ).fieldLabel()
             )
             appendLine(
                 EmptyField.Base(
-                    Strings().string(sBibleLangCodeField, mLanguage),
+                    "\\*${Strings().string(sBibleLangCodeField, mLanguage)}",
                     bibleLangCode,
                     -1
                 ).fieldLabel()
             )
             appendLine(
                 EmptyField.Base(
-                    Strings().string(sPoemTextLabelField, mLanguage),
+                    "\\*${Strings().string(sPoemTextLabelField, mLanguage)}",
                     text,
                     ""
                 ).fieldLabel()
@@ -130,8 +131,8 @@ class PoemContentManageMessage(
                 ),
                 listOf(
                     InlineButton(
-                        Strings().string("submit_label", mLanguage),
-                        if (mIsEditVerse) "editVerse=$id" else "submitAddVerse"
+                        Strings().string(sSubmitLabel, mLanguage),
+                        mCallbackData = if (mIsEditVerse) "editVerse=$id" else "submitAddVerse"
                     )
                 ),
                 listOf(

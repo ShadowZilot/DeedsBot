@@ -15,6 +15,18 @@ data class Poem(
     private val mLinkToProof: String,
     private val mImageSource: String
 ) : Record() {
+    constructor(langCode: String) : this(
+        -1,
+        -1,
+        langCode,
+        "",
+        "",
+        -1,
+        "",
+        "",
+        ""
+    )
+
     constructor(state: State) : this(
         state.int("id"),
         state.int("category_code"),
