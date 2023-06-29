@@ -7,13 +7,8 @@ import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackGotten
-import handlers.OnTextGotten
 import messages.PoemToMessage
-import sRandomPoemLabel
-import translations.domain.ContextString
-import translations.domain.ContextString.Base.Strings
 import updating.UpdatingLanguageCode
-import updating.UpdatingMessage
 
 class RandomPoemChain : Chain(OnCallbackGotten("randomPoem")) {
 
