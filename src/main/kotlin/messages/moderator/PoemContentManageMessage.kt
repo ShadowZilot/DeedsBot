@@ -15,6 +15,7 @@ import sAddVerseHelperLabel
 import sBibleLangCodeField
 import sBibleLangLabelField
 import sCategoryLabelField
+import sEditVerseHelperLabel
 import sImageSourceLabelField
 import sLinkToProofLabelField
 import sPoemTextLabelField
@@ -41,13 +42,23 @@ class PoemContentManageMessage(
         imageSource: String
     ): Executable {
         val message = buildString {
-            appendLine(Strings().string(sAddVerseHelperLabel, mLanguage))
+            appendLine(
+                Strings().string(
+                    if (mIsEditVerse) {
+                        sEditVerseHelperLabel
+                    } else {
+                        sAddVerseHelperLabel
+                    }, mLanguage
+                )
+            )
             appendLine()
-            appendLine(EmptyField.Base(
-                "\\*${Strings().string(sCategoryLabelField, mLanguage)}",
-                CategoryStorage.Base.Instance().categoryName(mLanguage.map(UpdatingLanguageCode()), categoryCode),
-                ""
-            ).fieldLabel())
+            appendLine(
+                EmptyField.Base(
+                    "\\*${Strings().string(sCategoryLabelField, mLanguage)}",
+                    CategoryStorage.Base.Instance().categoryName(mLanguage.map(UpdatingLanguageCode()), categoryCode),
+                    ""
+                ).fieldLabel()
+            )
             appendLine(
                 EmptyField.Base(
                     "\\*${Strings().string(sVerseTagLabelField, mLanguage)}",

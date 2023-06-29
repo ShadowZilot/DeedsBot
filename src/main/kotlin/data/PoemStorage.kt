@@ -9,7 +9,13 @@ interface PoemStorage : StorageShell {
 
     fun randomPoem(languageCode: String, categoryCode: Int) : Poem
 
+    fun searchPoem(query: String, offset: Int) : List<Poem>
+
+    fun poemById(id: Int) : Poem
+
     fun insertPoem(poem: Poem)
+
+    fun updatePoem(poem: Poem)
 
     class Base private constructor(
         private val mTableName: String,
@@ -37,8 +43,45 @@ interface PoemStorage : StorageShell {
             return poem ?: throw Exception()
         }
 
+        override fun searchPoem(query: String, offset: Int): List<Poem> {
+            val result = mutableListOf<Poem>()
+            mDatabase.executeQuery(
+                if (query.isEmpty()) {
+                    "SELECT * FROM $mTableName LIMIT 50 OFFSET $offset;"
+                } else {
+                    "SELECT * FROM $mTableName WHERE `poem_text` LIKE \"%$query%\"" +
+                            "OR `tag` LIKE \"%$query%\" LIMIT 50 OFFSET $offset;"
+                }
+            ) { item, next ->
+                var isNext = next
+                while (isNext) {
+                    result.add(
+                        Poem(item)
+                    )
+                    isNext = item.next()
+                }
+            }
+            return result
+        }
+
+        override fun poemById(id: Int): Poem {
+            var poem: Poem? = null
+            mDatabase.executeQuery(
+                "SELECT * FROM $mTableName WHERE `id` = $id"
+            ) { item, _ ->
+                poem = Poem(item)
+            }
+            return poem ?: throw Exception()
+        }
+
         override fun insertPoem(poem: Poem) {
             mDatabase.executeQueryWithoutResult(poem.insertSQLQuery(mTableName))
+        }
+
+        override fun updatePoem(poem: Poem) {
+            mDatabase.executeQueryWithoutResult(
+                poem.updateSQLQuery(mTableName)
+            )
         }
 
         override fun tableName() = mTableName

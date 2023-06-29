@@ -86,5 +86,5 @@ data class Poem(
     override fun updateSQLQuery(tableName: String) = "UPDATE $tableName SET `category_code` = $mCategoryCode," +
             " `lang_code` = '$mLangCode', `tag` = '$mTag', `bible_lang` = '$mBibleLang'," +
             " `bible_lang_code` = $mBibleLangCode, `poem_text` = '$mPoemText'," +
-            " `link_to_proof` = '$mLinkToProof' `image_source` = '$mImageSource' WHERE `id` = $mId"
+            " `link_to_proof` = '$mLinkToProof', `image_source` = '$mImageSource' WHERE `id` = $mId"
 }

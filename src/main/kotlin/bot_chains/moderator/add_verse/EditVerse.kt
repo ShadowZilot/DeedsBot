@@ -1,28 +1,25 @@
-package bot_chains.moderator.menu
+package bot_chains.moderator.add_verse
 
 import chain.Chain
 import core.Updating
 import data.ClearPoemModel
+import data.Poem
+import data.PoemStorage
+import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
-import handlers.OnCallbackGotten
+import handlers.OnCallbackDataGotten
 import messages.moderator.ModeratorMenu
-import updating.UserIdUpdating
 
-class BackToModeratorMenu : Chain(OnCallbackGotten("backToModeratorMenu")) {
+class EditVerse : Chain(OnCallbackDataGotten("editVerse")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
+        val poem = Poem(mStates.state(updating))
+        PoemStorage.Base.Instance().updatePoem(poem)
         ClearPoemModel.Base(mStates, updating).clear()
-        mStates.state(updating).editor(mStates).apply {
-            deleteValue("isEditPoem")
-        }.commit()
         return listOf(
+            AnswerToCallback(mKey, "Стих отредактирован!", true),
             DeleteMessage(mKey, updating),
-            DeleteMessage(
-                mKey,
-                updating.map(UserIdUpdating()).toString(),
-                mStates.state(updating).int("mainMessageId").toLong()
-            ),
             ModeratorMenu.Base(
                 mKey,
                 updating,

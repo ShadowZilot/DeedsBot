@@ -26,7 +26,7 @@ class EndInputCategory : Chain(OnCallbackDataGotten("addCategory")) {
                 PoemContentManageMessage(
                     mKey,
                     updating,
-                    false
+                    mStates.state(updating).boolean("isEditPoem")
                 ) {
                     mStates.state(updating).editor(mStates).apply {
                         putInt("mainMessageId", it)

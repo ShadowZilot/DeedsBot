@@ -1,25 +1,25 @@
-package bot_chains.moderator.add_verse
+package bot_chains.moderator.verses_list
 
 import chain.Chain
 import core.Updating
-import data.Poem
+import data.PoemStorage
+import data.PoemToState
 import executables.DeleteMessage
 import executables.Executable
 import handlers.OnTextGotten
 import messages.moderator.PoemContentManageMessage
-import staging.safetyString
 import updating.UpdatingMessage
 import updating.UserIdUpdating
 
-class EndEnterStringField : Chain(OnTextGotten()) {
-
+class GoToVerseItem : Chain(OnTextGotten()) {
     override suspend fun executableChain(updating: Updating): List<Executable> {
-        return if (mStates.state(updating).safetyString("waitForString") != "") {
-            val input = updating.map(UpdatingMessage())
-            val key = mStates.state(updating).string("waitForString")
+        val textData = updating.map(UpdatingMessage())
+        return if (textData.contains("verse=")) {
+            val poemId = textData.split("=")[1].toInt()
+            val poem = PoemStorage.Base.Instance().poemById(poemId)
+            poem.map(PoemToState(mStates, updating))
             mStates.state(updating).editor(mStates).apply {
-                putString(key, input)
-                deleteValue("waitForString")
+                putBoolean("isEditPoem", true)
             }.commit()
             listOf(
                 DeleteMessage(mKey, updating),
@@ -28,11 +28,11 @@ class EndEnterStringField : Chain(OnTextGotten()) {
                     updating.map(UserIdUpdating()).toString(),
                     mStates.state(updating).int("mainMessageId").toLong()
                 ),
-                Poem(mStates.state(updating)).map(
+                poem.map(
                     PoemContentManageMessage(
                         mKey,
                         updating,
-                        mStates.state(updating).boolean("isEditPoem")
+                        mStates.state(updating).boolean("isEditPoem"),
                     ) {
                         mStates.state(updating).editor(mStates).apply {
                             putInt("mainMessageId", it)
