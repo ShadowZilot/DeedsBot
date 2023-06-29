@@ -1,6 +1,7 @@
 package data
 
 import helpers.storage.Record
+import staging.State
 import java.sql.ResultSet
 
 data class Poem(
@@ -14,6 +15,29 @@ data class Poem(
     private val mLinkToProof: String,
     private val mImageSource: String
 ) : Record() {
+    constructor(langCode: String) : this(
+        -1,
+        -1,
+        langCode,
+        "",
+        "",
+        -1,
+        "",
+        "",
+        ""
+    )
+
+    constructor(state: State) : this(
+        state.int("id"),
+        state.int("category_code"),
+        state.string("lang_code"),
+        state.string("tag"),
+        state.string("bible_lang"),
+        state.int("bible_lang_code"),
+        state.string("poem_text"),
+        state.string("link_to_proof"),
+        state.string("image_source")
+    )
 
     constructor(item: ResultSet) : this(
         item.getInt("id"),

@@ -1,4 +1,4 @@
-package bot_chains.categories
+package bot_chains.moderator.add_verse
 
 import chain.Chain
 import commons.BackButton
@@ -6,6 +6,7 @@ import core.Updating
 import data.CategoryStorage
 import data.CategoryToButton
 import executables.AnswerToCallback
+import executables.DeleteMessage
 import executables.Executable
 import executables.SendMessage
 import handlers.OnCallbackGotten
@@ -16,7 +17,7 @@ import sSelectCategoryLabel
 import translations.domain.ContextString.Base.Strings
 import updating.UpdatingLanguageCode
 
-class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
+class StartInputCategory : Chain(OnCallbackGotten("inputCategory")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
         val keyboard = InlineKeyboardMarkup(
@@ -26,7 +27,13 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
                 )
                 val tmp = mutableListOf<InlineButton>()
                 for (i in categories.indices) {
-                    tmp.add(categories[i].map(CategoryToButton()))
+                    tmp.add(
+                        categories[i].map(
+                            CategoryToButton(
+                                "addCategory"
+                            )
+                        )
+                    )
                     if (i % 2 != 0) {
                         add(tmp.toList())
                         tmp.clear()
@@ -39,7 +46,7 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
                 add(
                     listOf(
                         BackButton.Base(
-                            "anotherPoem",
+                            "moderatorBackToVerse",
                             updating
                         ).button()
                     )
@@ -48,14 +55,20 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
         )
         return listOf(
             AnswerToCallback(mKey),
+            DeleteMessage(
+                mKey,
+                updating
+            ),
             SendMessage(
                 mKey,
-                Strings().string(sSelectCategoryLabel, updating),
+                buildString {
+                    appendLine(Strings().string(sSelectCategoryLabel, updating))
+                },
                 keyboard
             ) {
                 mStates.state(updating).editor(mStates).apply {
                     putInt("mainMessageId", it)
-                }
+                }.commit()
             }
         )
     }
