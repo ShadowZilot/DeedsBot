@@ -6,6 +6,7 @@ import core.Updating
 import data.CategoryStorage
 import data.CategoryToButton
 import executables.AnswerToCallback
+import executables.DeleteMessage
 import executables.Executable
 import executables.SendMessage
 import handlers.OnCallbackGotten
@@ -48,6 +49,7 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
         )
         return listOf(
             AnswerToCallback(mKey),
+            DeleteMessage(mKey, updating),
             SendMessage(
                 mKey,
                 Strings().string(sSelectCategoryLabel, updating),
@@ -55,7 +57,7 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
             ) {
                 mStates.state(updating).editor(mStates).apply {
                     putInt("mainMessageId", it)
-                }
+                }.commit()
             }
         )
     }

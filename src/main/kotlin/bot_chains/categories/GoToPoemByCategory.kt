@@ -4,6 +4,7 @@ import chain.Chain
 import core.Updating
 import data.PoemStorage
 import executables.AnswerToCallback
+import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
 import messages.PoemToMessage
@@ -16,6 +17,7 @@ class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
         val categoryCode = updating.map(UpdatingCallbackInt("poemByCategory"))
         return listOf(
             AnswerToCallback(mKey),
+            DeleteMessage(mKey, updating),
             PoemStorage.Base.Instance().randomPoem(
                 updating.map(UpdatingLanguageCode()),
                 categoryCode
