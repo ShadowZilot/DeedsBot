@@ -8,6 +8,7 @@ import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
 import messages.moderator.PoemContentManageMessage
+import staging.safetyBoolean
 import updating.UpdatingCallbackInt
 
 class EndInputCategory : Chain(OnCallbackDataGotten("addCategory")) {
@@ -26,7 +27,7 @@ class EndInputCategory : Chain(OnCallbackDataGotten("addCategory")) {
                 PoemContentManageMessage(
                     mKey,
                     updating,
-                    mStates.state(updating).boolean("isEditPoem")
+                    mStates.state(updating).safetyBoolean("isEditPoem")
                 ) {
                     mStates.state(updating).editor(mStates).apply {
                         putInt("mainMessageId", it)

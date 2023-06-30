@@ -30,7 +30,7 @@ class EndInputImage : Chain(OnPhotoGotten()) {
                     PoemContentManageMessage(
                         mKey,
                         updating,
-                        mStates.state(updating).boolean("isEditPoem"),
+                        mStates.state(updating).safetyBoolean("isEditPoem"),
                     ) {
                         mStates.state(updating).editor(mStates).apply {
                             putInt("mainMessageId", it)

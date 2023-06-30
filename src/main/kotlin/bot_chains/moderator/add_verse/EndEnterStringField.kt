@@ -7,6 +7,7 @@ import executables.DeleteMessage
 import executables.Executable
 import handlers.OnTextGotten
 import messages.moderator.PoemContentManageMessage
+import staging.safetyBoolean
 import staging.safetyString
 import updating.UpdatingMessage
 import updating.UserIdUpdating
@@ -32,7 +33,7 @@ class EndEnterStringField : Chain(OnTextGotten()) {
                     PoemContentManageMessage(
                         mKey,
                         updating,
-                        mStates.state(updating).boolean("isEditPoem")
+                        mStates.state(updating).safetyBoolean("isEditPoem")
                     ) {
                         mStates.state(updating).editor(mStates).apply {
                             putInt("mainMessageId", it)
