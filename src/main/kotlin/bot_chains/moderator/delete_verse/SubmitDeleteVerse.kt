@@ -4,6 +4,7 @@ import chain.Chain
 import core.Updating
 import data.PoemStorage
 import executables.AnswerToCallback
+import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
 import messages.moderator.ModeratorMenu
@@ -18,6 +19,10 @@ class SubmitDeleteVerse : Chain(OnCallbackDataGotten("submitVerseDelete")) {
         PoemStorage.Base.Instance().deletePoem(verseId)
         return listOf(
             AnswerToCallback(mKey, Strings().string(sVerseDeletedMessage, updating), true),
+            DeleteMessage(
+                mKey,
+                updating
+            ),
             ModeratorMenu.Base(
                 mKey,
                 updating,

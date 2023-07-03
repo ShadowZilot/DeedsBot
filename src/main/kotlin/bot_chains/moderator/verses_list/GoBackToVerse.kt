@@ -8,6 +8,7 @@ import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
 import messages.moderator.PoemContentManageMessage
+import staging.safetyBoolean
 import updating.UpdatingCallbackInt
 
 class GoBackToVerse : Chain(OnCallbackDataGotten("goBackToVerse")) {
@@ -21,7 +22,7 @@ class GoBackToVerse : Chain(OnCallbackDataGotten("goBackToVerse")) {
                 PoemContentManageMessage(
                     mKey,
                     updating,
-                    false
+                    mStates.state(updating).safetyBoolean("isEditPoem")
                 ) {
                     mStates.state(updating).editor(mStates).apply {
                         putInt("mainMessageId", it)

@@ -13,6 +13,8 @@ interface PoemStorage : StorageShell {
 
     fun poemById(id: Int) : Poem
 
+    fun isPoemExits(tag: String, language: String): Boolean
+
     fun insertPoem(poem: Poem)
 
     fun updatePoem(poem: Poem)
@@ -74,6 +76,17 @@ interface PoemStorage : StorageShell {
                 poem = Poem(item)
             }
             return poem ?: throw Exception()
+        }
+
+        override fun isPoemExits(tag: String, language: String): Boolean {
+            var isExist = false
+            mDatabase.executeQuery(
+                "SELECT COUNT(`id`) as poem_count FROM $mTableName WHERE" +
+                        " `tag` = '$tag' AND `lang_code` = '$language'"
+            ) { item, _ ->
+                isExist = item.getInt("poem_count") == 1
+            }
+            return isExist
         }
 
         override fun insertPoem(poem: Poem) {
