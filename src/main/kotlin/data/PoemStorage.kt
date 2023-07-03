@@ -17,6 +17,8 @@ interface PoemStorage : StorageShell {
 
     fun updatePoem(poem: Poem)
 
+    fun deletePoem(id: Int)
+
     class Base private constructor(
         private val mTableName: String,
         private val mDatabase: DatabaseHelper
@@ -81,6 +83,12 @@ interface PoemStorage : StorageShell {
         override fun updatePoem(poem: Poem) {
             mDatabase.executeQueryWithoutResult(
                 poem.updateSQLQuery(mTableName)
+            )
+        }
+
+        override fun deletePoem(id: Int) {
+            mDatabase.executeQueryWithoutResult(
+                "DELETE FROM $mTableName WHERE `id` = $id"
             )
         }
 

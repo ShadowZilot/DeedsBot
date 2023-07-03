@@ -15,6 +15,7 @@ import sAddVerseHelperLabel
 import sBibleLangCodeField
 import sBibleLangLabelField
 import sCategoryLabelField
+import sDeleteLabel
 import sEditVerseHelperLabel
 import sImageSourceLabelField
 import sLinkToProofLabelField
@@ -146,6 +147,16 @@ class PoemContentManageMessage(
                         mCallbackData = if (mIsEditVerse) "editVerse=$id" else "submitAddVerse"
                     )
                 ),
+                if (mIsEditVerse) {
+                    listOf(
+                        InlineButton(
+                            Strings().string(sDeleteLabel, mLanguage),
+                            mCallbackData = "deleteVerse=$id"
+                        )
+                    )
+                } else {
+                    emptyList()
+                },
                 listOf(
                     BackButton.Base(
                         "backToModeratorMenu",
