@@ -10,6 +10,7 @@ import helpers.ToMarkdownSupported
 import helpers.convertToVertical
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
+import keyboard_markup.KeyboardButton
 import sAnotherPoemLabel
 import sSeeInSource
 import sSeeProofLabel
@@ -51,20 +52,28 @@ class PoemToMessage(
             appendLine("_${ToMarkdownSupported.Base(text.trim()).convertedString()}_")
         }
         val keyboard = InlineKeyboardMarkup(
-            listOf(
-                InlineButton(
-                    Strings().string(sSeeProofLabel, mUserLanguageCode),
-                    mUrl = linkToProof
-                ),
-                InlineButton(
-                    Strings().string(sSeeInSource, mUserLanguageCode),
-                    mWebAppUrl = "https://www.bible.com/bible/$bibleLangCode/$tag.$bibleLang"
-                ),
-                InlineButton(
-                    Strings().string(sAnotherPoemLabel, mUserLanguageCode),
-                    mCallbackData = "anotherPoem"
+            mutableListOf<KeyboardButton>().apply {
+                if (linkToProof.isNotEmpty()) {
+                    add(
+                        InlineButton(
+                            Strings().string(sSeeProofLabel, mUserLanguageCode),
+                            mUrl = linkToProof
+                        )
+                    )
+                }
+                add(
+                    InlineButton(
+                        Strings().string(sSeeInSource, mUserLanguageCode),
+                        mWebAppUrl = "https://www.bible.com/bible/$bibleLangCode/$tag.$bibleLang"
+                    )
                 )
-            ).convertToVertical()
+                add(
+                    InlineButton(
+                        Strings().string(sAnotherPoemLabel, mUserLanguageCode),
+                        mCallbackData = "anotherPoem"
+                    )
+                )
+            }.convertToVertical()
         )
         return if (imageSource.isEmpty()) {
             SendMessage(
