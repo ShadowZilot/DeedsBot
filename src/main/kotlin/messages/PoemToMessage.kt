@@ -1,5 +1,6 @@
 package messages
 
+import commons.TagWithoutVerse
 import core.Updating
 import data.CategoryStorage
 import data.Poem
@@ -64,7 +65,9 @@ class PoemToMessage(
                 add(
                     InlineButton(
                         Strings().string(sSeeInSource, mUserLanguageCode),
-                        mWebAppUrl = "https://www.bible.com/bible/$bibleLangCode/$tag.$bibleLang"
+                        mUrl = "https://www.bible.com/bible/$bibleLangCode/${
+                            TagWithoutVerse.Base(tag).newTag()
+                        }.$bibleLang"
                     )
                 )
                 add(
