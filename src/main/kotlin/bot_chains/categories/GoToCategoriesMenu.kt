@@ -10,6 +10,7 @@ import executables.DeleteMessage
 import executables.Executable
 import executables.SendMessage
 import handlers.OnCallbackGotten
+import helpers.convertToVertical
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
@@ -21,31 +22,19 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
         val keyboard = InlineKeyboardMarkup(
-            mutableListOf<List<KeyboardButton>>().apply {
-                val categories = CategoryStorage.Base.Instance().categoriesByLanguage(
+            mutableListOf<KeyboardButton>().apply {
+                addAll(CategoryStorage.Base.Instance().categoriesByLanguage(
                     updating.map(UpdatingLanguageCode())
-                )
-                val tmp = mutableListOf<InlineButton>()
-                for (i in categories.indices) {
-                    tmp.add(categories[i].map(CategoryToButton()))
-                    if (i % 2 != 0) {
-                        add(tmp.toList())
-                        tmp.clear()
-                    }
-                }
-                if (categories.size % 2 != 0) {
-                    add(tmp.toList())
-                    tmp.clear()
-                }
+                ).map {
+                    it.map(CategoryToButton())
+                })
                 add(
-                    listOf(
-                        BackButton.Base(
-                            "anotherPoem",
-                            updating
-                        ).button()
-                    )
+                    BackButton.Base(
+                        "anotherPoem",
+                        updating
+                    ).button()
                 )
-            }
+            }.convertToVertical()
         )
         return listOf(
             AnswerToCallback(mKey),
