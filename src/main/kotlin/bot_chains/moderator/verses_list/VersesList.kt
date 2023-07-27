@@ -13,6 +13,7 @@ import updating.UpdatingInlineQueryOffset
 class VersesList : Chain(OnInlineQuerySenderChat()) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
+        val offset = updating.map(UpdatingInlineQueryOffset())
         return listOf(
             AnswerInlineQuery(
                 mKey,
@@ -22,7 +23,7 @@ class VersesList : Chain(OnInlineQuerySenderChat()) {
                 ).map {
                     it.map(PoemToListItem())
                 },
-                updating.map(UpdatingInlineQueryOffset()) + 50,
+                 offset + 50,
                 0
             )
         )

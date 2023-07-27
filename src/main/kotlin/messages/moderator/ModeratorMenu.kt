@@ -16,7 +16,7 @@ import translations.domain.ContextString.Base.Strings
 
 interface ModeratorMenu {
 
-    fun message() : Executable
+    fun message(): Executable
 
     class Base(
         private val mKey: String,
@@ -32,6 +32,10 @@ interface ModeratorMenu {
                     InlineButton(
                         Strings().string(sSearchVersesLabel, mLanguage),
                         mInlineMode = InlineModeQuery.CurrentChat("")
+                    ),
+                    InlineButton(
+                        "Категории",
+                        mCallbackData = "moderatorCategories"
                     ),
                     InlineButton(
                         Strings().string(sAddVerseLabel, mLanguage),

@@ -15,6 +15,8 @@ interface PoemStorage : StorageShell {
 
     fun isPoemExits(tag: String, language: String): Boolean
 
+    fun poemsByCode(categoryCode: Int, offset: Int) : List<Poem>
+
     fun insertPoem(poem: Poem)
 
     fun updatePoem(poem: Poem)
@@ -87,6 +89,23 @@ interface PoemStorage : StorageShell {
                 isExist = item.getInt("poem_count") == 1
             }
             return isExist
+        }
+
+        override fun poemsByCode(categoryCode: Int, offset: Int): List<Poem> {
+            val result = mutableListOf<Poem>()
+            mDatabase.executeQuery(
+                "SELECT * FROM $mTableName WHERE category_code = $categoryCode" +
+                        " ORDER BY tag LIMIT 50 OFFSET $offset;"
+            ) { item, next ->
+                var isNext = next
+                while (isNext) {
+                    result.add(
+                        Poem(item)
+                    )
+                    isNext = item.next()
+                }
+            }
+            return result
         }
 
         override fun insertPoem(poem: Poem) {
