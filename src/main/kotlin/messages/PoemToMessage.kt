@@ -35,7 +35,8 @@ class PoemToMessage(
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ): Executable {
         val textMessage = buildString {
             if (mSelectedCategory != -1) {
@@ -50,7 +51,9 @@ class PoemToMessage(
                 )
             }
             appendLine()
-            appendLine("_${ToMarkdownSupported.Base(text.trim()).convertedString()}_")
+            appendLine(ToMarkdownSupported.Base(text.trim()).convertedString())
+            appendLine()
+            appendLine("_${ToMarkdownSupported.Base(localizedTag).convertedString()}_")
         }
         val keyboard = InlineKeyboardMarkup(
             mutableListOf<KeyboardButton>().apply {

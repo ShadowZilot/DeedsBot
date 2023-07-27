@@ -15,7 +15,8 @@ class DoesPoemExists(
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ): Pair<Boolean, Executable> {
         val result = PoemStorage.Base.Instance().isPoemExits(tag, langCode)
         return Pair(

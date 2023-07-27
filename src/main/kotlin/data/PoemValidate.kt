@@ -10,11 +10,12 @@ class PoemValidate : Poem.Mapper<Boolean> {
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ): Boolean {
         return categoryCode != -1 && langCode.isNotEmpty() &&
                 tag.isNotEmpty() && tag.length <= 24 &&
                 bibleLang.isNotEmpty() && bibleLang.length <= 8 &&
-                bibleLangCode != -1 && text.isNotEmpty()
+                bibleLangCode != -1 && text.isNotEmpty() && localizedTag.isNotEmpty()
     }
 }

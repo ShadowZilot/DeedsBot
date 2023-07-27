@@ -135,7 +135,8 @@ interface PoemStorage : StorageShell {
                 "bible_lang_code int," +
                 "poem_text text," +
                 "link_to_proof varchar(128)," +
-                "image_source varchar(256)" +
+                "image_source varchar(256)," +
+                "localized_tag varchar(24)" +
                 ");"
 
         object Instance {

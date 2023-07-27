@@ -16,7 +16,8 @@ class PoemToListItem: Poem.Mapper<InlineQueryResult> {
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ) = InlineQueryResultText(
         id,
         tag,

@@ -16,7 +16,8 @@ class PoemToState(
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ) {
         mStates.state(mUpdating).editor(mStates).apply {
             putInt("id", id)

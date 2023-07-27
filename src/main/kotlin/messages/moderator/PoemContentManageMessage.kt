@@ -40,7 +40,8 @@ class PoemContentManageMessage(
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ): Executable {
         val message = buildString {
             appendLine(
@@ -85,6 +86,13 @@ class PoemContentManageMessage(
                 EmptyField.Base(
                     "\\*${Strings().string(sPoemTextLabelField, mLanguage)}",
                     text,
+                    ""
+                ).fieldLabel()
+            )
+            appendLine(
+                EmptyField.Base(
+                    "Местописание",
+                    localizedTag,
                     ""
                 ).fieldLabel()
             )
@@ -135,6 +143,13 @@ class PoemContentManageMessage(
                         linkToProof,
                         "inputString=link_to_proof"
                     ).button(),
+                    EmptyButton.TextButton(
+                        "Местописание",
+                        localizedTag,
+                        "inputString=localized_tag"
+                    ).button()
+                ),
+                listOf(
                     EmptyButton.TextButton(
                         Strings().string(sImageSourceLabelField, mLanguage),
                         imageSource,
