@@ -1,36 +1,35 @@
-package bot_chains.categories
+package bot_chains.moderator.verses_list.categories
 
 import chain.Chain
 import commons.BackButton
 import core.Updating
 import data.CategoryStorage
 import data.CategoryToButton
+import data.CategoryToInlineButton
 import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
 import executables.SendMessage
 import handlers.OnCallbackGotten
 import helpers.convertToVertical
-import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
-import sSelectCategoryLabel
-import translations.domain.ContextString.Base.Strings
 import updating.UpdatingLanguageCode
 
-class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
+class ModeratorGoCategories : Chain(OnCallbackGotten("moderatorCategories")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
         val keyboard = InlineKeyboardMarkup(
             mutableListOf<KeyboardButton>().apply {
-                addAll(CategoryStorage.Base.Instance().categoriesByLanguage(
+                addAll(
+                    CategoryStorage.Base.Instance().categoriesByLanguage(
                     updating.map(UpdatingLanguageCode())
                 ).map {
-                    it.map(CategoryToButton())
+                    it.map(CategoryToInlineButton())
                 })
                 add(
                     BackButton.Base(
-                        "anotherPoem",
+                        "backToModeratorMenu",
                         updating
                     ).button()
                 )
@@ -41,13 +40,12 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
             DeleteMessage(mKey, updating),
             SendMessage(
                 mKey,
-                Strings().string(sSelectCategoryLabel, updating),
+                buildString {
+                    appendLine("*Стихи по категориям*")
+                    appendLine()
+                },
                 keyboard
-            ) {
-                mStates.state(updating).editor(mStates).apply {
-                    putInt("mainMessageId", it)
-                }.commit()
-            }
+            )
         )
     }
 }

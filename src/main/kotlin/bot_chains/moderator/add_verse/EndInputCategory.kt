@@ -1,35 +1,37 @@
-package bot_chains.categories
+package bot_chains.moderator.add_verse
 
 import chain.Chain
 import core.Updating
-import data.PoemStorage
+import data.Poem
 import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
-import messages.PoemToMessage
+import messages.moderator.PoemContentManageMessage
+import staging.safetyBoolean
 import updating.UpdatingCallbackInt
-import updating.UpdatingLanguageCode
 
-class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
+class EndInputCategory : Chain(OnCallbackDataGotten("addCategory")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
-        val categoryCode = updating.map(UpdatingCallbackInt("poemByCategory"))
+        val categoryCode = updating.map(UpdatingCallbackInt("addCategory"))
+        mStates.state(updating).editor(mStates).apply {
+            putInt("category_code", categoryCode)
+        }.commit()
         return listOf(
             AnswerToCallback(mKey),
             DeleteMessage(mKey, updating),
-            PoemStorage.Base.Instance().randomPoem(
-                updating.map(UpdatingLanguageCode()),
-                categoryCode
+            Poem(
+                mStates.state(updating)
             ).map(
-                PoemToMessage(
+                PoemContentManageMessage(
                     mKey,
                     updating,
-                    categoryCode
+                    mStates.state(updating).safetyBoolean("isEditPoem")
                 ) {
                     mStates.state(updating).editor(mStates).apply {
                         putInt("mainMessageId", it)
-                    }
+                    }.commit()
                 }
             )
         )

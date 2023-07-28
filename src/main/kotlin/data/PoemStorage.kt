@@ -9,6 +9,20 @@ interface PoemStorage : StorageShell {
 
     fun randomPoem(languageCode: String, categoryCode: Int) : Poem
 
+    fun searchPoem(query: String, offset: Int) : List<Poem>
+
+    fun poemById(id: Int) : Poem
+
+    fun isPoemExits(tag: String, language: String): Boolean
+
+    fun poemsByCode(categoryCode: Int, offset: Int) : List<Poem>
+
+    fun insertPoem(poem: Poem)
+
+    fun updatePoem(poem: Poem)
+
+    fun deletePoem(id: Int)
+
     class Base private constructor(
         private val mTableName: String,
         private val mDatabase: DatabaseHelper
@@ -35,6 +49,81 @@ interface PoemStorage : StorageShell {
             return poem ?: throw Exception()
         }
 
+        override fun searchPoem(query: String, offset: Int): List<Poem> {
+            val result = mutableListOf<Poem>()
+            mDatabase.executeQuery(
+                if (query.isEmpty()) {
+                    "SELECT * FROM $mTableName LIMIT 50 OFFSET $offset;"
+                } else {
+                    "SELECT * FROM $mTableName WHERE `poem_text` LIKE \"%$query%\"" +
+                            "OR `tag` LIKE \"%$query%\" LIMIT 50 OFFSET $offset;"
+                }
+            ) { item, next ->
+                var isNext = next
+                while (isNext) {
+                    result.add(
+                        Poem(item)
+                    )
+                    isNext = item.next()
+                }
+            }
+            return result
+        }
+
+        override fun poemById(id: Int): Poem {
+            var poem: Poem? = null
+            mDatabase.executeQuery(
+                "SELECT * FROM $mTableName WHERE `id` = $id"
+            ) { item, _ ->
+                poem = Poem(item)
+            }
+            return poem ?: throw Exception()
+        }
+
+        override fun isPoemExits(tag: String, language: String): Boolean {
+            var isExist = false
+            mDatabase.executeQuery(
+                "SELECT COUNT(`id`) as poem_count FROM $mTableName WHERE" +
+                        " `tag` = '$tag' AND `lang_code` = '$language'"
+            ) { item, _ ->
+                isExist = item.getInt("poem_count") == 1
+            }
+            return isExist
+        }
+
+        override fun poemsByCode(categoryCode: Int, offset: Int): List<Poem> {
+            val result = mutableListOf<Poem>()
+            mDatabase.executeQuery(
+                "SELECT * FROM $mTableName WHERE category_code = $categoryCode" +
+                        " ORDER BY tag LIMIT 50 OFFSET $offset;"
+            ) { item, next ->
+                var isNext = next
+                while (isNext) {
+                    result.add(
+                        Poem(item)
+                    )
+                    isNext = item.next()
+                }
+            }
+            return result
+        }
+
+        override fun insertPoem(poem: Poem) {
+            mDatabase.executeQueryWithoutResult(poem.insertSQLQuery(mTableName))
+        }
+
+        override fun updatePoem(poem: Poem) {
+            mDatabase.executeQueryWithoutResult(
+                poem.updateSQLQuery(mTableName)
+            )
+        }
+
+        override fun deletePoem(id: Int) {
+            mDatabase.executeQueryWithoutResult(
+                "DELETE FROM $mTableName WHERE `id` = $id"
+            )
+        }
+
         override fun tableName() = mTableName
 
         override fun tableSchema() = "CREATE TABLE $mTableName(" +
@@ -46,7 +135,8 @@ interface PoemStorage : StorageShell {
                 "bible_lang_code int," +
                 "poem_text text," +
                 "link_to_proof varchar(128)," +
-                "image_source varchar(256)" +
+                "image_source varchar(256)," +
+                "localized_tag varchar(24)" +
                 ");"
 
         object Instance {

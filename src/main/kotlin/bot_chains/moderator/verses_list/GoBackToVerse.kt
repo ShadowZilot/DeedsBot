@@ -1,4 +1,4 @@
-package bot_chains.categories
+package bot_chains.moderator.verses_list
 
 import chain.Chain
 import core.Updating
@@ -7,29 +7,26 @@ import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
-import messages.PoemToMessage
+import messages.moderator.PoemContentManageMessage
+import staging.safetyBoolean
 import updating.UpdatingCallbackInt
-import updating.UpdatingLanguageCode
 
-class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
+class GoBackToVerse : Chain(OnCallbackDataGotten("goBackToVerse")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
-        val categoryCode = updating.map(UpdatingCallbackInt("poemByCategory"))
+        val verseId = updating.map(UpdatingCallbackInt("goBackToVerse"))
         return listOf(
             AnswerToCallback(mKey),
             DeleteMessage(mKey, updating),
-            PoemStorage.Base.Instance().randomPoem(
-                updating.map(UpdatingLanguageCode()),
-                categoryCode
-            ).map(
-                PoemToMessage(
+            PoemStorage.Base.Instance().poemById(verseId).map(
+                PoemContentManageMessage(
                     mKey,
                     updating,
-                    categoryCode
+                    mStates.state(updating).safetyBoolean("isEditPoem")
                 ) {
                     mStates.state(updating).editor(mStates).apply {
                         putInt("mainMessageId", it)
-                    }
+                    }.commit()
                 }
             )
         )

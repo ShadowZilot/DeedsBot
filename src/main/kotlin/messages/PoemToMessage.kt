@@ -1,5 +1,6 @@
 package messages
 
+import commons.TagWithoutVerse
 import core.Updating
 import data.CategoryStorage
 import data.Poem
@@ -10,6 +11,8 @@ import helpers.ToMarkdownSupported
 import helpers.convertToVertical
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
+import keyboard_markup.KeyboardButton
+import logs.Logging
 import sAnotherPoemLabel
 import sSeeInSource
 import sSeeProofLabel
@@ -33,7 +36,8 @@ class PoemToMessage(
         bibleLangCode: Int,
         text: String,
         linkToProof: String,
-        imageSource: String
+        imageSource: String,
+        localizedTag: String
     ): Executable {
         val textMessage = buildString {
             if (mSelectedCategory != -1) {
@@ -48,23 +52,37 @@ class PoemToMessage(
                 )
             }
             appendLine()
-            appendLine("_${ToMarkdownSupported.Base(text.trim()).convertedString()}_")
+            appendLine(ToMarkdownSupported.Base(text.trim()).convertedString())
+            if (localizedTag.isNotEmpty()) {
+                appendLine()
+                appendLine("_${ToMarkdownSupported.Base(localizedTag).convertedString()}_")
+            }
         }
         val keyboard = InlineKeyboardMarkup(
-            listOf(
-                InlineButton(
-                    Strings().string(sSeeProofLabel, mUserLanguageCode),
-                    mUrl = linkToProof
-                ),
-                InlineButton(
-                    Strings().string(sSeeInSource, mUserLanguageCode),
-                    mUrl = "https://www.bible.com/bible/$bibleLangCode/$tag.$bibleLang"
-                ),
-                InlineButton(
-                    Strings().string(sAnotherPoemLabel, mUserLanguageCode),
-                    mCallbackData = "anotherPoem"
+            mutableListOf<KeyboardButton>().apply {
+                if (linkToProof.isNotEmpty()) {
+                    add(
+                        InlineButton(
+                            Strings().string(sSeeProofLabel, mUserLanguageCode),
+                            mUrl = linkToProof
+                        )
+                    )
+                }
+                add(
+                    InlineButton(
+                        Strings().string(sSeeInSource, mUserLanguageCode),
+                        mUrl = "https://www.bible.com/bible/$bibleLangCode/${
+                            TagWithoutVerse.Base(tag).newTag()
+                        }.$bibleLang"
+                    )
                 )
-            ).convertToVertical()
+                add(
+                    InlineButton(
+                        Strings().string(sAnotherPoemLabel, mUserLanguageCode),
+                        mCallbackData = "anotherPoem"
+                    )
+                )
+            }.convertToVertical()
         )
         return if (imageSource.isEmpty()) {
             SendMessage(
