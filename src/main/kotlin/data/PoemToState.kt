@@ -29,6 +29,7 @@ class PoemToState(
             putString("poem_text", text)
             putString("link_to_proof", linkToProof)
             putString("image_source", imageSource)
+            putString("localized_tag", localizedTag)
         }.commit()
     }
 }
@@ -52,6 +53,7 @@ interface ClearPoemModel {
                 deleteValue("poem_text")
                 deleteValue("link_to_proof")
                 deleteValue("image_source")
+                deleteValue("localized_tag")
             }.commit()
         }
     }

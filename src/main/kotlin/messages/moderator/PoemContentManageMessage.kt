@@ -91,7 +91,7 @@ class PoemContentManageMessage(
             )
             appendLine(
                 EmptyField.Base(
-                    "Местописание",
+                    "Место писание",
                     localizedTag,
                     ""
                 ).fieldLabel()
@@ -144,7 +144,7 @@ class PoemContentManageMessage(
                         "inputString=link_to_proof"
                     ).button(),
                     EmptyButton.TextButton(
-                        "Местописание",
+                        "Место писание",
                         localizedTag,
                         "inputString=localized_tag"
                     ).button()

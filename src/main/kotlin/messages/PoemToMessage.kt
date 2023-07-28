@@ -12,6 +12,7 @@ import helpers.convertToVertical
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
+import logs.Logging
 import sAnotherPoemLabel
 import sSeeInSource
 import sSeeProofLabel
@@ -52,8 +53,10 @@ class PoemToMessage(
             }
             appendLine()
             appendLine(ToMarkdownSupported.Base(text.trim()).convertedString())
-            appendLine()
-            appendLine("_${ToMarkdownSupported.Base(localizedTag).convertedString()}_")
+            if (localizedTag.isNotEmpty()) {
+                appendLine()
+                appendLine("_${ToMarkdownSupported.Base(localizedTag).convertedString()}_")
+            }
         }
         val keyboard = InlineKeyboardMarkup(
             mutableListOf<KeyboardButton>().apply {
