@@ -10,6 +10,7 @@ import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.ReplyButton
 import keyboard_markup.ReplyKeyboardMarkup
+import sContactLabel
 import sPoemCategoryLabel
 import sRandomPoemLabel
 import sStartLabel
@@ -40,6 +41,10 @@ interface MainMenu {
                     InlineButton(
                         Strings().string(sRandomPoemLabel, updating),
                         mCallbackData = "randomPoem"
+                    ),
+                    InlineButton(
+                        Strings().string(sContactLabel, updating),
+                        mCallbackData = "contact"
                     )
                 ).convertToVertical()
             )

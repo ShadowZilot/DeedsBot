@@ -2,6 +2,8 @@ import core.BotProvider
 import core.storage.Storages
 import data.CategoryStorage
 import data.PoemStorage
+import data.TownsStorage
+import functions.ContactFunction
 import functions.GreetingFeature
 import functions.ModeratorFunctions
 import functions.PoemsProviding
@@ -17,9 +19,12 @@ fun main(args: Array<String>) {
     db.createTable(PoemStorage.Base.Instance().tableSchema())
     CategoryStorage.Base.Instance.create("poem_categories", db)
     db.createTable(CategoryStorage.Base.Instance().tableSchema())
+    TownsStorage.Base.Instance.create("towns", db)
+    db.createTable(TownsStorage.Base.Instance().tableSchema())
     provider.createdBot(
         ModeratorFunctions(),
         GreetingFeature(),
         PoemsProviding(),
+        ContactFunction()
     )
 }
