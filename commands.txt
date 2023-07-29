@@ -1,0 +1,57 @@
+curl --request POST \
+  --url https://api.telegram.org/bot5990678926:AAHEcn6sEfVn-U0JWJ9br3PMCouELh4M2SE/setMyCommands \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"commands": [
+		{
+			"command": "start",
+			"description": "Запуск бота"
+		},
+		{
+			"command": "tell_story",
+			"description": "Рассказать свидетельство"
+		},
+		{
+			"command": "support",
+			"description": "Связь с создателями"
+		},
+		{
+			"command": "help",
+			"description": "FAQ"
+		},
+		{
+			"command": "language",
+			"description": "Смена языка"
+		}
+	],
+	"language_code": "ru"
+}'
+
+curl --request POST \
+  --url https://api.telegram.org/bot5990678926:AAHEcn6sEfVn-U0JWJ9br3PMCouELh4M2SE/setMyCommands \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"commands": [
+		{
+			"command": "start",
+			"description": "Start bot"
+		},
+		{
+			"command": "tell_story",
+			"description": "Tell the miracle"
+		},
+		{
+			"command": "support",
+			"description": "Write to support"
+		},
+		{
+			"command": "help",
+			"description": "FAQ"
+		},
+		{
+			"command": "language",
+			"description": "Change language"
+		}
+	],
+	"language_code": "en"
+}'

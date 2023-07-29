@@ -12,8 +12,8 @@ import helpers.convertToVertical
 import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
-import logs.Logging
 import sAnotherPoemLabel
+import sDiscussLabel
 import sSeeInSource
 import sSeeProofLabel
 import sSelectedCategoryLabel
@@ -74,6 +74,12 @@ class PoemToMessage(
                         mUrl = "https://www.bible.com/bible/$bibleLangCode/${
                             TagWithoutVerse.Base(tag).newTag()
                         }.$bibleLang"
+                    )
+                )
+                add(
+                    InlineButton(
+                        Strings().string(sDiscussLabel, mUserLanguageCode),
+                        mCallbackData = "goDiscuss=$id"
                     )
                 )
                 add(

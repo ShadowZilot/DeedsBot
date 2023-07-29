@@ -14,7 +14,7 @@ class TownList : Chain(OnCallbackGotten("townList")) {
             AnswerToCallback(mKey),
             TownListMessage.Base(
                 mKey,
-                "contact"
+                mStates.state(updating).string("contactBackParameter")
             ).message(updating)
         )
     }

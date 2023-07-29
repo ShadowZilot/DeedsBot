@@ -6,6 +6,7 @@ import core.BotChains
 class ContactFunction : BotChains {
 
     override fun chains() = listOf(
+        GoToDiscuss(),
         GoToContact(),
         TownList(),
         BeginFillContactForm(),

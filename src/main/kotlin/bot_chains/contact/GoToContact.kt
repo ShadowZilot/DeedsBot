@@ -19,7 +19,8 @@ class GoToContact : Chain(OnCallbackGotten("contact")) {
             AnswerToCallback(mKey),
             ContactMenu.Base(
                 mKey,
-                true
+                true,
+                "backToMainMenu"
             ).message(updating)
         )
     }

@@ -20,6 +20,7 @@ interface ContactMenu {
     class Base(
         private val mKey: String,
         private val mIsEdit: Boolean,
+        private val mReturnParameter: String,
         private val mOnId: (id: Int) -> Unit = {}
     ) : ContactMenu {
 
@@ -35,7 +36,7 @@ interface ContactMenu {
                         Strings().string(sContactByRequestLabel, updating),
                         mCallbackData = "contactRequest"
                     ),
-                    BackButton.Base("backToMainMenu", updating).button()
+                    BackButton.Base(mReturnParameter, updating).button()
                 ).convertToVertical()
             )
             return if (mIsEdit) {
