@@ -1,13 +1,17 @@
 package functions
 
-import bot_chains.contact.GoToContact
-import bot_chains.contact.TownList
+import bot_chains.contact.*
 import core.BotChains
 
 class ContactFunction : BotChains {
 
     override fun chains() = listOf(
         GoToContact(),
-        TownList()
+        TownList(),
+        BeginFillContactForm(),
+        SecondStatusContact(),
+        ThirdStatusContact(),
+        FinalForm(),
+        SubmitForm()
     )
 }
