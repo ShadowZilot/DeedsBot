@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.human_developing_soft"
-version = "0.9.6"
+version = "0.9.7"
 
 repositories {
     mavenCentral()

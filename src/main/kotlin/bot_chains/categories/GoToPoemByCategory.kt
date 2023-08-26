@@ -15,6 +15,9 @@ class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
         val categoryCode = updating.map(UpdatingCallbackInt("poemByCategory"))
+        mStates.state(updating).editor(mStates).apply {
+            putInt("verseCategory", categoryCode)
+        }.commit()
         return listOf(
             AnswerToCallback(mKey),
             DeleteMessage(mKey, updating),
@@ -29,7 +32,7 @@ class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
                 ) {
                     mStates.state(updating).editor(mStates).apply {
                         putInt("mainMessageId", it)
-                    }
+                    }.commit()
                 }
             )
         )

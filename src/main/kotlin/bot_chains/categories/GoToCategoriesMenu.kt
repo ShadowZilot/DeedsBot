@@ -11,7 +11,6 @@ import executables.Executable
 import executables.SendMessage
 import handlers.OnCallbackGotten
 import helpers.convertToVertical
-import keyboard_markup.InlineButton
 import keyboard_markup.InlineKeyboardMarkup
 import keyboard_markup.KeyboardButton
 import sSelectCategoryLabel
@@ -30,7 +29,7 @@ class GoToCategoriesMenu : Chain(OnCallbackGotten("poemCategories")) {
                 })
                 add(
                     BackButton.Base(
-                        "anotherPoem",
+                        "backToMainMenu",
                         updating
                     ).button()
                 )

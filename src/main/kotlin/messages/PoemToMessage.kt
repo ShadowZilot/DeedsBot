@@ -1,5 +1,6 @@
 package messages
 
+import commons.BackButton
 import commons.TagWithoutVerse
 import core.Updating
 import data.CategoryStorage
@@ -85,8 +86,14 @@ class PoemToMessage(
                 add(
                     InlineButton(
                         Strings().string(sAnotherPoemLabel, mUserLanguageCode),
-                        mCallbackData = "anotherPoem"
+                        mCallbackData = "randomPoem"
                     )
+                )
+                add(
+                    BackButton.Base(
+                        "backToMainMenu",
+                        mUserLanguageCode
+                    ).button()
                 )
             }.convertToVertical()
         )
