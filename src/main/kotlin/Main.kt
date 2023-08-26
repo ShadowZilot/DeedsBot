@@ -3,10 +3,7 @@ import core.storage.Storages
 import data.CategoryStorage
 import data.PoemStorage
 import data.TownsStorage
-import functions.ContactFunction
-import functions.GreetingFeature
-import functions.ModeratorFunctions
-import functions.PoemsProviding
+import functions.*
 import helpers.storage.jdbc_wrapping.DatabaseHelper
 import okhttp3.OkHttpClient
 
@@ -22,6 +19,8 @@ fun main(args: Array<String>) {
     TownsStorage.Base.Instance.create("towns", db)
     db.createTable(TownsStorage.Base.Instance().tableSchema())
     provider.createdBot(
+        MiracleChains(),
+        SupportFunction(),
         ModeratorFunctions(),
         GreetingFeature(),
         PoemsProviding(),
