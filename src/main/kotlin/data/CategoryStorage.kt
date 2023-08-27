@@ -63,7 +63,7 @@ interface CategoryStorage : StorageShell {
                         " AND `category_code` = $categoryCode;"
             ) { item, _ ->
                 linkToProof = try {
-                    item.getString("link_to_proof")
+                    item.getString("link_to_proof") ?: ""
                 } catch (e: SQLException) {
                     ""
                 }

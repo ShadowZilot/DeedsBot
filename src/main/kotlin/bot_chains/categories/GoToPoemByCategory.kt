@@ -7,6 +7,7 @@ import executables.AnswerToCallback
 import executables.DeleteMessage
 import executables.Executable
 import handlers.OnCallbackDataGotten
+import logs.Logging
 import messages.PoemToMessage
 import updating.UpdatingCallbackInt
 import updating.UpdatingLanguageCode
@@ -14,27 +15,33 @@ import updating.UpdatingLanguageCode
 class GoToPoemByCategory : Chain(OnCallbackDataGotten("poemByCategory")) {
 
     override suspend fun executableChain(updating: Updating): List<Executable> {
-        val categoryCode = updating.map(UpdatingCallbackInt("poemByCategory"))
-        mStates.state(updating).editor(mStates).apply {
-            putInt("verseCategory", categoryCode)
-        }.commit()
-        return listOf(
-            AnswerToCallback(mKey),
-            DeleteMessage(mKey, updating),
-            PoemStorage.Base.Instance().randomPoem(
-                updating.map(UpdatingLanguageCode()),
-                categoryCode
-            ).map(
-                PoemToMessage(
-                    mKey,
-                    updating,
+        try {
+            val categoryCode = updating.map(UpdatingCallbackInt("poemByCategory"))
+            mStates.state(updating).editor(mStates).apply {
+                putInt("verseCategory", categoryCode)
+            }.commit()
+            return listOf(
+                AnswerToCallback(mKey),
+                DeleteMessage(mKey, updating),
+                PoemStorage.Base.Instance().randomPoem(
+                    updating.map(UpdatingLanguageCode()),
                     categoryCode
-                ) {
-                    mStates.state(updating).editor(mStates).apply {
-                        putInt("mainMessageId", it)
-                    }.commit()
-                }
+                ).map(
+                    PoemToMessage(
+                        mKey,
+                        updating,
+                        categoryCode
+                    ) {
+                        mStates.state(updating).editor(mStates).apply {
+                            putInt("mainMessageId", it)
+                        }.commit()
+                    }
+                )
             )
-        )
+        } catch (e: Exception) {
+            Logging.ConsoleLog.log(e.message ?: "")
+            Logging.ConsoleLog.log(e.stackTraceToString())
+        }
+        return listOf()
     }
 }
