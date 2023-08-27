@@ -2,6 +2,7 @@ import core.BotProvider
 import core.storage.Storages
 import data.CategoryStorage
 import data.PoemStorage
+import data.QuestionStorage
 import data.TownsStorage
 import functions.*
 import helpers.storage.jdbc_wrapping.DatabaseHelper
@@ -18,8 +19,11 @@ fun main(args: Array<String>) {
     db.createTable(CategoryStorage.Base.Instance().tableSchema())
     TownsStorage.Base.Instance.create("towns", db)
     db.createTable(TownsStorage.Base.Instance().tableSchema())
+    QuestionStorage.Base.Instance.create("faq", db)
+    db.createTable(QuestionStorage.Base.Instance().tableSchema())
     provider.createdBot(
         MiracleChains(),
+        HelpFunctions(),
         SupportFunction(),
         ModeratorFunctions(),
         GreetingFeature(),
