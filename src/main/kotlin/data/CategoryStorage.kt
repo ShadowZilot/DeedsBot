@@ -8,7 +8,11 @@ interface CategoryStorage : StorageShell {
 
     fun categoriesByLanguage(langCode: String): List<Category>
 
-    fun categoryName(langCode: String, categoryCode: Int) : String
+    fun categoryName(langCode: String, categoryCode: Int): String
+
+    fun updateCategory(category: Category)
+
+    fun categoryLinkToProof(categoryCode: Int, langCode: String): String
 
     class Base private constructor(
         private val mTableName: String,
@@ -46,13 +50,35 @@ interface CategoryStorage : StorageShell {
             return name
         }
 
+        override fun updateCategory(category: Category) {
+            mDatabase.executeQueryWithoutResult(
+                category.updateSQLQuery(mTableName)
+            )
+        }
+
+        override fun categoryLinkToProof(categoryCode: Int, langCode: String): String {
+            var linkToProof = ""
+            mDatabase.executeQuery(
+                "SELECT link_to_proof FROM $mTableName WHERE `language_code` = '$langCode'" +
+                        " AND `category_code` = $categoryCode;"
+            ) { item, _ ->
+                linkToProof = try {
+                    item.getString("link_to_proof")
+                } catch (e: SQLException) {
+                    ""
+                }
+            }
+            return linkToProof
+        }
+
         override fun tableName() = mTableName
 
         override fun tableSchema() = "CREATE TABLE $mTableName(" +
                 "id int primary key auto_increment," +
                 "name varchar(64)," +
                 "category_code int," +
-                "language_code varchar(8)" +
+                "language_code varchar(8)," +
+                "link_to_proof varchar(128)" +
                 ")"
         object Instance {
             private var mInstance: CategoryStorage? = null

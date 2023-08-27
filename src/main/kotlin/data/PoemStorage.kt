@@ -5,17 +5,19 @@ import helpers.storage.jdbc_wrapping.DatabaseHelper
 
 interface PoemStorage : StorageShell {
 
-    fun randomPoem(languageCode: String) : Poem
+    fun randomPoem(languageCode: String): Poem
 
-    fun randomPoem(languageCode: String, categoryCode: Int) : Poem
+    fun randomPoem(languageCode: String, categoryCode: Int): Poem
 
-    fun searchPoem(query: String, offset: Int) : List<Poem>
+    fun allPoems(languageCode: String): List<Poem>
 
-    fun poemById(id: Int) : Poem
+    fun searchPoem(query: String, offset: Int): List<Poem>
+
+    fun poemById(id: Int): Poem
 
     fun isPoemExits(tag: String, language: String): Boolean
 
-    fun poemsByCode(categoryCode: Int, offset: Int) : List<Poem>
+    fun poemsByCode(categoryCode: Int, offset: Int): List<Poem>
 
     fun insertPoem(poem: Poem)
 
@@ -47,6 +49,22 @@ interface PoemStorage : StorageShell {
                 poem = Poem(item)
             }
             return poem ?: throw Exception()
+        }
+
+        override fun allPoems(languageCode: String): List<Poem> {
+            val result = mutableListOf<Poem>()
+            mDatabase.executeQuery(
+                "SELECT * FROM $mTableName WHERE `lang_code` = '$languageCode';"
+            ) { item, next ->
+                var isNext = next
+                while (isNext) {
+                    result.add(
+                        Poem(item)
+                    )
+                    isNext = item.next()
+                }
+            }
+            return result
         }
 
         override fun searchPoem(query: String, offset: Int): List<Poem> {

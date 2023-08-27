@@ -7,7 +7,8 @@ class CategoryToInlineButton : Category.Mapper<InlineButton> {
 
     override fun map(
         id: Int, name: String, categoryCode: Int,
-        languageCode: String
+        languageCode: String,
+        linkToProof: String
     ) = InlineButton(
         name,
         mInlineMode = InlineModeQuery.CurrentChat("category=${categoryCode}")

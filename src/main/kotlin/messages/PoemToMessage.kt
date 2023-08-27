@@ -40,6 +40,11 @@ class PoemToMessage(
         imageSource: String,
         localizedTag: String
     ): Executable {
+        val activeLinkToProof = if (mSelectedCategory == -1) {
+            linkToProof
+        } else {
+            CategoryStorage.Base.Instance().categoryLinkToProof(mSelectedCategory, "ru")
+        }
         val textMessage = buildString {
             if (mSelectedCategory != -1) {
                 appendLine(
@@ -61,11 +66,11 @@ class PoemToMessage(
         }
         val keyboard = InlineKeyboardMarkup(
             mutableListOf<KeyboardButton>().apply {
-                if (linkToProof.isNotEmpty()) {
+                if (activeLinkToProof.isNotEmpty()) {
                     add(
                         InlineButton(
                             Strings().string(sSeeProofLabel, mUserLanguageCode),
-                            mUrl = linkToProof
+                            mUrl = activeLinkToProof
                         )
                     )
                 }

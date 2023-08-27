@@ -28,6 +28,7 @@ fun main(args: Array<String>) {
         ModeratorFunctions(),
         GreetingFeature(),
         PoemsProviding(),
-        ContactFunction()
+        ContactFunction(),
+        DeedsChannel()
     )
 }
